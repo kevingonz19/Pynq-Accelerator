@@ -1,0 +1,58 @@
+Putting data 0 into conv1_queue
+conv1 received data
+Timeout waiting for result 0 from fc2_queue
+pool1 timed out waiting for the data
+conv2 timed out waiting for the data
+pool2 timed out waiting for the data
+fc1 timed out waiting for the data
+fc2 timed out waiting for the data
+---------------------------------------------------------------------------
+RuntimeError                              Traceback (most recent call last)
+<ipython-input-13-2f1da10820ac> in <module>()
+    104 Test_number=1  # number of images  for testing procedure
+    105 loop = asyncio.get_event_loop()
+--> 106 loop.run_until_complete(test(Test_number))
+
+/usr/lib/python3.6/asyncio/base_events.py in run_until_complete(self, future)
+    466             raise RuntimeError('Event loop stopped before Future completed.')
+    467 
+--> 468         return future.result()
+    469 
+    470     def stop(self):
+
+<ipython-input-13-2f1da10820ac> in test(testnumber)
+     92     for queue in [conv1_queue, pool1_queue, conv2_queue, pool2_queue, fc1_queue, fc2_queue]:
+     93         await queue.put(None)
+---> 94     await asyncio.gather(*tasks)
+     95 
+     96     for i in range(size[0]):
+
+<ipython-input-13-2f1da10820ac> in process_layer(layer, input_queue, output_queue, dma, layer_name)
+     41         print(f"{layer_name} received data")
+     42         #result = await layer.forward(data, dma)
+---> 43         result = await layer.forward(data,dma)
+     44         #result = await asyncio.get_event_loop().run_in_executor(executor1, layer.forward, data, dma)
+     45         print(f"{layer_name} processed data")
+
+/home/xilinx/jupyter_notebooks/seniorDesign/Pynq-Accelerator/LeNet/Accelerator1.py in forward(self, data, dma, Load_Input, Load_Weight)
+     63         Configuration[16] = Load_Weight
+     64 
+---> 65         await asyncio.get_event_loop().run_in_executor(self.executor, dma.sendchannel.transfer, Configuration)
+     66         await asyncio.get_event_loop().run_in_executor(self.executor, dma.sendchannel.wait)
+     67         await asyncio.get_event_loop().run_in_executor(self.executor, dma.recvchannel.transfer, Configuration)
+
+/usr/lib/python3.6/concurrent/futures/thread.py in run(self)
+     54 
+     55         try:
+---> 56             result = self.fn(*self.args, **self.kwargs)
+     57         except BaseException as exc:
+     58             self.future.set_exception(exc)
+
+/usr/local/lib/python3.6/dist-packages/pynq/lib/dma.py in transfer(self, array)
+    120             raise RuntimeError('DMA channel not started')
+    121         if not self.idle and not self._first_transfer:
+--> 122             raise RuntimeError('DMA channel not idle')
+    123         if self._flush_before:
+    124             array.flush()
+
+RuntimeError: DMA channel not idle
