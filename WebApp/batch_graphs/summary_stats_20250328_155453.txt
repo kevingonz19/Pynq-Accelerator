@@ -1,0 +1,12 @@
+cpu_accuracy_mean: 1.0000
+cpu_accuracy_median: 1.0000
+fpga_accuracy_mean: 1.0000
+fpga_accuracy_median: 1.0000
+cpu_time_mean: 1152.4297
+cpu_time_median: 1152.6300
+fpga_time_mean: 166.9567
+fpga_time_median: 166.9500
+cpu_conf_gap_mean: 0.0441
+cpu_conf_gap_median: 0.0211
+fpga_conf_gap_mean: 0.0464
+fpga_conf_gap_median: 0.0225
